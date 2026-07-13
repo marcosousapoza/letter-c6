@@ -1,0 +1,10 @@
+[package]
+name = "letter-c6"
+version = "0.1.0"
+entrypoint = "src/lib.typ"
+compiler = "0.15.0"
+description = "Formal Swiss A4 letters for C6/5 left-window envelopes"
+
+[tool.typst_forge]
+kind = "template"
+namespace = "local"
