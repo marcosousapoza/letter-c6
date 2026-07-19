@@ -2,6 +2,7 @@
 
 #let sender = swiss-sender(
   name: "Anna Beispiel",
+  role: "Geschäftsführerin",
   organization: "Beispiel AG",
   street: "Bahnhofstrasse 1",
   postcode: "3000",

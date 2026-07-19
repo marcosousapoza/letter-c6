@@ -31,16 +31,21 @@
 #let clean-business-style = (
   font: "Liberation Sans",
   font-size: 10.5pt,
-  line-height: 0.65em,
+  line-height: 0.58em,
+  accent: rgb("243d60"),
+  muted: luma(42%),
+  rule: luma(55%),
   address-font-size: 10pt,
   address-line-height: 0.25em,
   return-font-size: 6.5pt,
-  return-rule: 0.35pt,
-  letterhead-title-size: 12pt,
-  letterhead-name-size: 9pt,
+  return-rule: 0.45pt,
+  letterhead-title-size: 14pt,
+  letterhead-subtitle-size: 9pt,
   letterhead-detail-size: 7.5pt,
-  letterhead-fill: rgb("f5f5f5"),
-  letterhead-rule: 1.2pt,
+  letterhead-fill: white,
+  letterhead-rule: 0.45pt,
+  date-size: 8.7pt,
+  subject-size: 10.5pt,
   signature-image-gap: 0.35cm,
   signature-name-gap: 0.15cm,
   signature-blank-space: 1.15cm,
@@ -108,6 +113,7 @@
   street: none,
   postcode: none,
   town: none,
+  role: none,
   organization: none,
   phone: none,
   email: none,
@@ -117,6 +123,7 @@
   _required-text(street, "sender street")
   _required-text(postcode, "sender postcode")
   _required-text(town, "sender town")
+  _optional-text(role, "sender role")
   _optional-text(organization, "sender organization")
   _optional-text(phone, "sender phone")
   _optional-text(email, "sender email")
@@ -128,17 +135,18 @@
   )
 
   let lines = ()
-  if organization != none { lines.push(organization) }
   lines.push(name)
+  if role != none { lines.push(role) }
+  if organization != none { lines.push(organization) }
   lines.push(street)
   lines.push(postcode + " " + town)
   if phone != none { lines.push(phone) }
   if email != none { lines.push(email) }
   if website != none { lines.push(website) }
-  let return-name = if organization != none { organization } else { name }
   (
     lines: lines,
     name: name,
+    role: role,
     organization: organization,
     street: street,
     postcode: postcode,
@@ -146,7 +154,7 @@
     phone: phone,
     email: email,
     website: website,
-    return-line: return-name + " · " + street + " · " + postcode + " " + town,
+    return-line: name + " · " + street + " · " + postcode + " " + town,
   )
 }
 
@@ -167,10 +175,10 @@
     clip: true,
   )[
     #box(width: 100%, height: layout.address.return-height)[
-      #set text(font: style.font, size: style.return-font-size, fill: black)
+      #set text(font: style.font, size: style.return-font-size, fill: style.muted)
       #sender.return-line
       #v(0.08cm)
-      #line(length: 100%, stroke: style.return-rule + black)
+      #line(length: 100%, stroke: style.return-rule + style.rule)
     ]
     #v(0.12cm)
     #set text(font: style.font, size: style.address-font-size, fill: black)
@@ -183,8 +191,9 @@
 }
 
 #let _letterhead(sender, layout, style) = {
-  let heading = if sender.organization != none { sender.organization } else { sender.name }
-  let show-name = sender.organization != none
+  let subtitle = ()
+  if sender.role != none { subtitle.push(sender.role) }
+  if sender.organization != none { subtitle.push(sender.organization) }
   let contacts = ()
   if sender.phone != none {
     let phone-href = "tel:" + sender.phone.replace(regex("[^+0-9]"), "")
@@ -201,29 +210,37 @@
     }
     contacts.push(link(website-href)[#sender.website])
   }
+  let details = [
+    #set text(size: style.letterhead-detail-size, fill: style.muted)
+    #sender.street · #sender.postcode #sender.town
+    #if contacts.len() > 0 {
+      linebreak()
+      contacts.join(linebreak())
+    }
+  ]
 
   block(
     width: layout.letterhead.width,
-    inset: (x: 0.25cm, y: 0.24cm),
+    inset: (top: 0.2cm),
     fill: style.letterhead-fill,
-    stroke: (top: style.letterhead-rule + black),
+    stroke: (top: style.letterhead-rule + style.rule),
   )[
     #set text(font: style.font, fill: black)
-    #set par(leading: 0.3em)
     #align(right)[
-      #text(size: style.letterhead-title-size, weight: "bold")[#heading]
-      #if show-name {
+      #text(size: style.letterhead-title-size, weight: "bold", sender.name)
+      #if subtitle.len() > 0 {
         linebreak()
-        text(size: style.letterhead-name-size, sender.name)
+        move(dy: -0.26em)[
+          #text(size: style.letterhead-subtitle-size, weight: "bold", fill: style.accent)[
+            #subtitle.join([#h(1mm)#text(fill: style.muted)[|]#h(1mm)])
+          ]
+          #linebreak()
+          #details
+        ]
+      } else {
+        linebreak()
+        details
       }
-      #v(0.08cm)
-      #text(size: style.letterhead-detail-size, fill: luma(30%))[
-        #sender.street · #sender.postcode #sender.town
-        #if contacts.len() > 0 {
-          linebreak()
-          contacts.join(linebreak())
-        }
-      ]
     ]
   ]
 }
@@ -250,7 +267,7 @@
           top + left,
           dx: 0cm,
           dy: y,
-          line(length: 0.65cm, stroke: 0.5pt + black),
+          line(length: 0.65cm, stroke: 0.45pt + style.rule),
         )
       }
     }
@@ -311,10 +328,16 @@
   )
   set text(font: style.font, size: style.font-size, fill: black)
   set par(justify: false, leading: style.line-height)
+  show link: set text(fill: black)
 
-  align(right, date)
+  align(right, text(size: style.date-size, fill: style.muted, date))
   v(0.7cm)
-  text(weight: style.subject-weight, subject)
+  text(
+    size: style.subject-size,
+    weight: style.subject-weight,
+    fill: style.accent,
+    subject,
+  )
   v(0.75cm)
   salutation
   v(0.55cm)

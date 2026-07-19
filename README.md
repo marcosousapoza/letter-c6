@@ -14,6 +14,8 @@ plus the prose. The package owns the physical placement and business styling.
   street: "Bahnhofstrasse 1",
   postcode: "3000",
   town: "Bern",
+  role: "Geschäftsführerin",
+  organization: "Beispiel AG",
   phone: "+41 31 000 00 00",
   email: "anna.beispiel@example.ch",
   website: "example.ch",
@@ -42,11 +44,13 @@ Ihr Brieftext beginnt hier.
 
 The domestic recipient helper enforces a four-digit postcode without `CH-`,
 does not expose a country field, and produces three to six address lines with
-no inserted blank lines. Optional sender phone and email details stay in the
-letterhead and outside the recipient field. The window automatically includes
-a compact return-address line built from the sender organization (or name),
-street, postcode, and town; callers do not repeat this information. The main
-sender letterhead is styled separately in the upper-right part of the page.
+no inserted blank lines. The sender name is always the main letterhead heading;
+an optional `role` and `organization` appear together on the secondary line.
+Optional sender phone and email details stay in the letterhead and outside the
+recipient field. The window automatically includes a compact return-address
+line built from the sender name, street, postcode, and town; callers do not
+repeat this information. The main sender letterhead is styled separately in the
+upper-right part of the page.
 Phone numbers, email addresses, and websites are emitted as `tel:`, `mailto:`,
 and HTTP links in the resulting PDF.
 

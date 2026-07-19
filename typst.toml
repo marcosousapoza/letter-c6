@@ -5,6 +5,10 @@ entrypoint = "src/lib.typ"
 compiler = "0.15.0"
 description = "Formal Swiss A4 letters for C6/5 left-window envelopes"
 
+[template]
+path = "template"
+entrypoint = "main.typ"
+
 [tool.typst_forge]
 kind = "template"
 namespace = "local"
