@@ -89,11 +89,6 @@
   _optional-text(organization, "organization")
   _optional-text(department, "department")
 
-  assert(
-    postcode.match(regex("^\\d{4}$")) != none,
-    message: "postcode must contain exactly four digits and must not use the CH- prefix",
-  )
-
   let lines = ()
   if title != none { lines.push(title) }
   lines.push(name)
