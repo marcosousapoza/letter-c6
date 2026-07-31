@@ -4,6 +4,8 @@
 C6/5 left-window envelope. Callers supply structured sender and recipient data
 plus the prose. The package owns the physical placement and business styling.
 
+![Compiled example letter](docs/letter-preview.png)
+
 ## Use
 
 ```typst
