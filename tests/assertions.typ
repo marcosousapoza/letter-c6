@@ -31,6 +31,15 @@
   "8000 Zürich",
 ))
 
+#let prefixed-postcode = swiss-recipient(
+  name: "Max Muster",
+  street: "Musterstrasse 12",
+  postcode: "CH-8000",
+  town: "Zürich",
+)
+
+#assert(prefixed-postcode.lines.last() == "CH-8000 Zürich")
+
 #let sender = swiss-sender(
   name: "Anna Beispiel",
   organization: "Beispiel AG",

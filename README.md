@@ -44,7 +44,7 @@ plus the prose. The package owns the physical placement and business styling.
 Ihr Brieftext beginnt hier.
 ```
 
-The domestic recipient helper enforces a four-digit postcode without `CH-`,
+The domestic recipient helper accepts postcodes as non-empty, single-line text,
 does not expose a country field, and produces three to six address lines with
 no inserted blank lines. The sender name is always the main letterhead heading;
 an optional `role` and `organization` appear together on the secondary line.
